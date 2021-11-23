@@ -9,13 +9,13 @@ nbr_it = 0;
 max_it = 100000;
 
 %Numerical precision for floats
-prec = 32;
+prec = 64;
 
 %Initialize a and b for bisection method
-a = 0;
+a = -100;
 b = vpa(1e2,prec);
 
-epsilon = vpa(1e-18,prec);
+epsilon = vpa(1e-32,prec);
 
 history = [];
        
