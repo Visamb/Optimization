@@ -4,7 +4,7 @@ x0 = [2;1];
 
 %%
 
-[x,no_its,normgrad] = nonlinearmin(@func,x0,1e-6,1);
+[x,no_its,normgrad] = nonlinearmin(@rosenbrock,x0,1e-6,1);
 
 
 %%
@@ -36,12 +36,12 @@ no_its = no_its + 1
         
         
         %Gradient at step y
-        delta_f = grad(f,y)
+        delta_f = grad(f,y);
         
-        D = eye(dim)
+        %D = eye(dim);
         
         %Direction d
-        dj = -D*delta_f
+        dj = -D*delta_f;
         
         %Add this to not get exploding hessians or impossible line search
         if norm(dj) < 10e-8
@@ -50,7 +50,7 @@ no_its = no_its + 1
         
         %Linesearch to find optimal lambda
         F = @(lambda) f(y + dj*lambda);
-        [lambda,nbr,history] = linesearch(F,1e-20);
+        [lambda,nbr,history] = linesearch(F,1e-8);
         
         %Find new proposal for y
         y_new = (y + lambda*dj);
@@ -61,7 +61,7 @@ no_its = no_its + 1
 
         %Update D with BFGS or DFP depending on chosen method (page 82,89)
         if method == 1
-             D = D + (1+inv(transpose(pj)*qj)*transpose(qj)*D*qj)*inv(transpose(pj)*qj)*pj*transpose(pj)-inv(transpose(pj)*qj)*(pj*transpose(qj)*D + D*qj*transpose(pj))
+             D = D + (1+inv(transpose(pj)*qj)*transpose(qj)*D*qj)*inv(transpose(pj)*qj)*pj*transpose(pj)-inv(transpose(pj)*qj)*(pj*transpose(qj)*D + D*qj*transpose(pj));
         elseif method == 0
              D = D + inv(transpose(pj)*qj)*pj*transpose(pj)-inv(transpose(qj)*D*qj)*D*qj*transpose(qj)*D;
         end
@@ -76,7 +76,8 @@ no_its = no_its + 1
         
     end
     %When after inner loop, update x
-    x = y;
+    x = y
+    grads = grad(f,x)
 
 if norm(grad(f,x)) < tol
     criterion = true;
