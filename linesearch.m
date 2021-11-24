@@ -6,16 +6,16 @@ function [lambda,nbr_it,history] = linesearch(f,tol)
 nbr_it = 0;
 
 %Max number of iterations
-max_it = 100000;
+max_it = 10000000000000;
 
 %Numerical precision for floats
 prec = 64;
 
 %Initialize a and b for bisection method
-a = -100;
-b = vpa(1e2,prec);
+a = -5;
+b = vpa(5,prec);
 
-epsilon = vpa(1e-32,prec);
+epsilon = vpa(1e-16,prec);
 
 history = [];
        
@@ -36,12 +36,9 @@ while b-a > tol && nbr_it < max_it
     nbr_it = nbr_it + 1;
     history = [history; a,b, b-a];
 end
-    
-    
+
+
 lambda = lambda;
-    
-    
-    
     
     
 
