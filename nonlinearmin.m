@@ -1,15 +1,13 @@
 %% nonlinearmin
 
-x0 = [2;1];
+%%
+
+
+%[x, no_its, normg] = nonlinearmin(@func,[-20;20],1e-6,1,0)
 
 %%
 
-[x,no_its,normgrad] = nonlinearmin(@rosenbrock,x0,1e-6,1);
-
-
-%%
-
-function [x, no_its, normg] = nonlinearmin(f,x0,tol,method)
+function [x, no_its, normg] = nonlinearmin(f,x0,tol,method,restart)
 
 %Stop criterion
 criterion = false;
@@ -23,23 +21,33 @@ n = length(x0);
 
 %Initialize number of iterations for outer loop 
 no_its = 0;
+ls_its = 0;
 
 %First y (for inner loop)
 y = x0;
 
+
+
+%Create table for printing
+fileID = fopen('data.txt','w');
+fprintf('%12s %12s %12s %12s %12s %12s %12s\n', 'iteration','x','step size', 'f(x)', 'norm(grad)', 'ls iters', 'lambda');
+format short g
 %While stop criterion is not fulfilled
 while criterion == false
-no_its = no_its + 1
 
+    
+    no_its = no_its + 1;
+   
+    if restart
+            D = eye(dim);
+    end
 
     for j = 1:n
         
         
         %Gradient at step y
         delta_f = grad(f,y);
-        
-        %D = eye(dim);
-        
+                
         %Direction d
         dj = -D*delta_f;
         
@@ -49,8 +57,8 @@ no_its = no_its + 1
         end
         
         %Linesearch to find optimal lambda
-        F = @(lambda) f(y + dj*lambda);
-        [lambda,nbr,history] = linesearch(F,1e-8);
+        F = @(lamb) f(y + dj*lamb);
+        [lambda,ls_its] = armijo(F,2,0.3);
         
         %Find new proposal for y
         y_new = (y + lambda*dj);
@@ -69,15 +77,25 @@ no_its = no_its + 1
         %Update y
         y = y_new;
         
+        grad_norm = norm(grad(f,y));
+        step_size = abs(dj*lambda);
+        
         %Print 
         %fprintf('%12.4f %12.4f ',  norm(grad(@func,y)), lambda)
-
-
         
     end
+    
+    %Print
+    fprintf('%12.4f %12.4f %12.4f %12.4f %12.4f %12.4f %12.4f\n', no_its,y(1)',norm(step_size),f(y),grad_norm,ls_its,lambda)
+    
+    for j = 1:dim-1
+        fprintf('%12s %12.4f\n', strings,y(j+1))
+    end
+
+
     %When after inner loop, update x
-    x = y
-    grads = grad(f,x)
+    x = y;
+    grads = grad(f,x);
 
 if norm(grad(f,x)) < tol
     criterion = true;
@@ -85,7 +103,11 @@ end
 
 end
 
+
+
 normg = grad(f,x);
+
+
 
 end
 
