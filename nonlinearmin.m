@@ -58,7 +58,7 @@ while criterion == false
         
         %Linesearch to find optimal lambda
         F = @(lamb) f(y + dj*lamb);
-        [lambda,ls_its] = armijo(F,2,0.3);
+        [lambda,ls_its] = armijo(F,2,0.01);
         
         %Find new proposal for y
         y_new = (y + lambda*dj);
@@ -75,6 +75,7 @@ while criterion == false
         end
         
         %Update y
+        y_prev = y;
         y = y_new;
         
         grad_norm = norm(grad(f,y));
@@ -97,7 +98,7 @@ while criterion == false
     x = y;
     grads = grad(f,x);
 
-if norm(grad(f,x)) < tol
+if norm(grad(f,x)) < tol || abs(f(y) - f(y_prev)) < 1e-6
     criterion = true;
 end
 
