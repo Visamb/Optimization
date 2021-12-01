@@ -2,7 +2,7 @@
 
 %%
 
-[x, no_its, normg] = nonlinearmin(@func,[2;1.1],1e-6,1,1,1);
+%[x, no_its, normg] = nonlinearmin(@func,[2;1.1],1e-6,1,1,1);
 
 %%
 
@@ -102,22 +102,28 @@ end
 
         %Check criterion
         if (norm(grad(f,x)) < tol) 
+            fprintf('%s\n', '------------------------------------------------------------------------------------------')
             fprintf('%s\n', 'Optimization was terminated.')
             fprintf('%s\n','Stopping criterion: Stationary point reached. Derivative was smaller than the specified tolerance.')
+            fprintf('%s\n', '------------------------------------------------------------------------------------------')
             criterion = true;
         end
 
          %Check criterion
         if  (abs(f(y) - f(y_prev))) < 1e-6 
+            fprintf('%s\n', '------------------------------------------------------------------------------------------')
             fprintf('%s\n', 'Optimization was terminated.')
             fprintf('%s\n','Stopping criterion: Change in function value was less than the specified tolerance.')
+            fprintf('%s\n', '------------------------------------------------------------------------------------------')
             criterion = true;
         end
 
          %Check criterion
         if (norm(y-y_prev) < tol)
+            fprintf('%s\n', '------------------------------------------------------------------------------------------')
             fprintf('%s\n', 'Optimization was terminated.')
             fprintf('%s\n','Stopping criterion: Step size was less than the specified tolerance.')
+            fprintf('%s\n', '------------------------------------------------------------------------------------------')
             criterion = true;
         end
 
