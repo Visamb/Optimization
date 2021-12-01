@@ -12,8 +12,8 @@ T_lambda = f(0) + epsilon*lambda*f_prime_0;
 T_alpha_lambda = f(0) + epsilon*alpha*lambda*f_prime_0;
 
 if f_prime_0 > 0
-    lambda = 0;
-    s = 'derivative larger than 0'
+    s = 'derivative larger than 0';
+    return;
 end
 
 if f_prime_0 == 0
@@ -34,19 +34,20 @@ while true
   
     if isnan(f(lambda))
         lambda = 0
-        s = 'f(lambda) is not a number'
+        s = 'f(lambda) is not a number';
         break
     end
       
     %vpa((f(h+lambda)-f(lambda))/(h),prec)
     
     if abs(vpa((f(h+lambda)-f(lambda))/(h),prec)) < 1e-22
-        s = 'really small derivative'
+        s = 'really small derivative';
         break
     end
     
     if lambda < 1e-22
-        s = 'Lambda is really small'
+        s = 'Lambda is really small';
+        lambda = 0;
         break
     end
   

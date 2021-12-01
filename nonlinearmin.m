@@ -2,8 +2,7 @@
 
 %%
 
-
-%[x, no_its, normg] = nonlinearmin(@func,[-20;20],1e-6,1,0)
+[x, no_its, normg] = nonlinearmin(@func,[0;0],1e-6,1,0)
 
 %%
 
@@ -23,27 +22,31 @@ n = length(x0);
 no_its = 0;
 ls_its = 0;
 
+%Initialize parameters in case of immediate stop.
+lambda = 0;
+step_size = 0;
+grad_norm = 0;
+
 %First y (for inner loop)
 y = x0;
 
-
-
 %Create table for printing
-fileID = fopen('data.txt','w');
 fprintf('%12s %12s %12s %12s %12s %12s %12s\n', 'iteration','x','step size', 'f(x)', 'norm(grad)', 'ls iters', 'lambda');
 format short g
+
 %While stop criterion is not fulfilled
 while criterion == false
-
     
+    %Increase counter.
     no_its = no_its + 1;
    
+    %In case of restart, start from gradient descent at each iteration.
     if restart
             D = eye(dim);
     end
-
+    
+    %Inner loop
     for j = 1:n
-        
         
         %Gradient at step y
         delta_f = grad(f,y);
@@ -78,45 +81,29 @@ while criterion == false
         y_prev = y;
         y = y_new;
         
-        
+        %Norm of gradient and last step size.
         grad_norm = norm(grad(f,y));
         step_size = abs(dj*lambda);
         
-        if norm((y) - (y_prev)) < 1e-4
-            criterion = true;
-            break
-        end
-        
-        %Print 
-        %fprintf('%12.4f %12.4f ',  norm(grad(@func,y)), lambda)
-        
     end
     
-    %Print
+    %Print status
     fprintf('%12.4f %12.4f %12.4f %12.4f %12.4f %12.4f %12.4f\n', no_its,y(1)',norm(step_size),f(y),grad_norm,ls_its,lambda)
-    
     for j = 1:dim-1
         fprintf('%12s %12.4f\n', strings,y(j+1))
     end
-
-
+    
     %When after inner loop, update x
     x = y;
-    grads = grad(f,x);
-
-
-
-if (norm(grad(f,x)) < tol) || (abs(f(y) - f(y_prev))) < 1e-6 || (norm(y-y_prev) < 1e-2)
-    criterion = true;
-end
+    
+    %Check criterion
+    if (norm(grad(f,x)) < tol) || (abs(f(y) - f(y_prev))) < 1e-6 || (norm(y-y_prev) < 1e-5)
+        criterion = true;
+    end
 
 end
-
-
 
 normg = grad(f,x);
-
-
 
 end
 
