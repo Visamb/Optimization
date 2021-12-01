@@ -1,23 +1,19 @@
 %% constrained_problem
 
+%Starting point
 x0 = [0;0];
-mu_list = vpa([10, 1e1, 1e2, 1e3, 1e4, 1e5, 1e6, 1e7],64)
 
+%Chosen mu-parameters
+mu_list = vpa([1, 1e1, 1e2, 1e3, 1e4, 1e7, 1e8, 1e9],64)
+
+%Iterative solution. Choose specified problem and penalty function.
 for i = mu_list
-    current_mu = i;
-    func = @(x) (problem_9_5(x) + i*g_9_52(x));
-    [x0, no_its, normg] = nonlinearmin(func,x0,1e-3,1,0);
+    mu = i;
+    func = @(x) (problem_9_5(x) + mu*h_9_5(x));
+    [x0, no_its, normg] = nonlinearmin(func,x0,1e-6,1,0);
 end
 
-minimum = x0;
-
-
-
-%%
-test = h(x0)
-
 %% Functions
-
 
 function [y] = problem_9_5(x)
 
@@ -30,7 +26,6 @@ function [y] = problem_9_3(x)
 y = exp(x(1)) + x(1)^2 + x(1)*x(2);
 
 end
-
 
 function [y] = sample_problem(x)
 
@@ -54,23 +49,17 @@ y = (0.5*x(1) + x(2) -1)^p;
 
 end
 
-function [y] = g_9_5(x)
 
-p = 1;
+function [y] = h_9_5(x)
 
-y = (3-x(1)-x(2))^-p + (4+x(1)-2*x(2))^-p;
+p = 2;
 
-end
+% When g1,g2 < 0 we are in the right area.
+% When g1,g2 > 0 we want the barrier to -> inf
 
+g1 = max(0,(x(1)+x(2)-3));
+g2 = max(0,(-x(1)+2*x(2)-4));
 
-function [y] = g_9_52(x)
-
-p = 1;
-
-g1 = (x(1)+x(2)-3);
-g2 = (-x(1)+2*x(2)-4);
-
-y = log(min(1,-g1)) + log(min(1,-g2));
+y = g1^p + g2^p;
 
 end
-
