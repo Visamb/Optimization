@@ -1,12 +1,12 @@
 %% constrained_problem
 
 x0 = [0;0];
-mu_list = vpa([1, 1e1, 1e2, 1e3, 1e4, 1e5, 1e6, 1e7],64)
+mu_list = vpa([10, 1e1, 1e2, 1e3, 1e4, 1e5, 1e6, 1e7],64)
 
 for i = mu_list
     current_mu = i;
-    func = @(x) (problem_9_5(x) + i*g_9_5(x));
-    [x0, no_its, normg] = nonlinearmin(func,x0,1e-5,1,0);
+    func = @(x) (problem_9_5(x) + i*g_9_52(x));
+    [x0, no_its, normg] = nonlinearmin(func,x0,1e-3,1,0);
 end
 
 minimum = x0;
@@ -59,6 +59,18 @@ function [y] = g_9_5(x)
 p = 1;
 
 y = (3-x(1)-x(2))^-p + (4+x(1)-2*x(2))^-p;
+
+end
+
+
+function [y] = g_9_52(x)
+
+p = 1;
+
+g1 = (x(1)+x(2)-3);
+g2 = (-x(1)+2*x(2)-4);
+
+y = log(min(1,-g1)) + log(min(1,-g2));
 
 end
 

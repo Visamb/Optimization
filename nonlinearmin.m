@@ -78,8 +78,14 @@ while criterion == false
         y_prev = y;
         y = y_new;
         
+        
         grad_norm = norm(grad(f,y));
         step_size = abs(dj*lambda);
+        
+        if norm((y) - (y_prev)) < 1e-4
+            criterion = true;
+            break
+        end
         
         %Print 
         %fprintf('%12.4f %12.4f ',  norm(grad(@func,y)), lambda)
@@ -98,7 +104,9 @@ while criterion == false
     x = y;
     grads = grad(f,x);
 
-if norm(grad(f,x)) < tol || abs(f(y) - f(y_prev)) < 1e-6
+
+
+if (norm(grad(f,x)) < tol) || (abs(f(y) - f(y_prev))) < 1e-6 || (norm(y-y_prev) < 1e-2)
     criterion = true;
 end
 
