@@ -2,7 +2,7 @@
 
 %%
 
-%[x, no_its, normg] = nonlinearmin(@func,[2;1.1],1e-6,1,1,1);
+[x, no_its, normg] = nonlinearmin(@rosenbrock,[200;200],1e-6,1,1,1);
 
 %%
 
@@ -41,10 +41,12 @@ end
 
         %Increase counter.
         no_its = no_its + 1;
-
-        %In case of restart, start from gradient descent at each iteration.
+        
+        D = eye(dim);
+        
+        %In case of restart, start from gradient descent at some m<n.
         if restart
-                D = eye(dim);
+            n = ceil(n/1.8);    
         end
 
         %Inner loop
@@ -110,7 +112,7 @@ end
         end
 
          %Check criterion
-        if  (abs(f(y) - f(y_prev))) < 1e-6 
+        if  (abs(f(y) - f(y_prev))/abs(f(y_prev)) < 1e-6 )
             fprintf('%s\n', '------------------------------------------------------------------------------------------')
             fprintf('%s\n', 'Optimization was terminated.')
             fprintf('%s\n','Stopping criterion: Change in function value was less than the specified tolerance.')
