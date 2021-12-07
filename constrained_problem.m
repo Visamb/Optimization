@@ -1,10 +1,10 @@
 %% constrained_problem
 
 %Starting point
-x0 = [0;0];
+x0 = [100;100];
 
 %Chosen mu-parameters
-mu_list = vpa([1, 1e1, 1e2, 1e3, 1e4, 1e7, 1e8, 1e9],64);
+mu_list = vpa([1e1, 1e2, 1e3, 1e4, 1e5],64);
 
 %Iterative solution. Choose specified problem and penalty function.
 for i = mu_list

@@ -1,9 +1,9 @@
 %% nonlinearmin
 
 %%
-
-[x, no_its, normg] = nonlinearmin(@rosenbrock,[200;200],1e-6,1,1,1);
-
+tic
+[x, no_its, normg] = nonlinearmin(@rosenbrock,[200,200],1e-6,1,0,1);
+toc
 %%
 
 function [x, no_its, grad_norm] = nonlinearmin(f,x0,tol,method,restart,printout)
@@ -65,7 +65,7 @@ end
 
             %Linesearch to find optimal lambda
             F = @(lamb) f(y + dj*lamb);
-            [lambda,ls_its] = armijo(F,2,0.01);
+            [lambda,ls_its] = armijo(F,2,0.05);
 
             %Find new proposal for y
             y_new = (y + lambda*dj);

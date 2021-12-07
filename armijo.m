@@ -6,7 +6,7 @@ prec = 90;
 ls_its = 0;
 h = vpa(1e-12,prec);
 
-lambda = vpa(3,64);
+lambda = vpa(1,64);
 f_prime_0 = vpa((f(h)-f(0))/(h),prec);
 T_lambda = f(0) + epsilon*lambda*f_prime_0;
 T_alpha_lambda = f(0) + epsilon*alpha*lambda*f_prime_0;
