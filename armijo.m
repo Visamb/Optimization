@@ -2,7 +2,7 @@
 
 function [lambda,ls_its] = armijo(f,alpha,epsilon)
 
-prec = 90;
+prec = 10;
 ls_its = 0;
 h = vpa(1e-12,prec);
 

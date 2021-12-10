@@ -1,7 +1,7 @@
 %% constrained_problem
 
 %Starting point
-x0 = [100;100];
+x0 = [10;0;0;0;10];
 
 %Chosen mu-parameters
 mu_list = vpa([1e1, 1e2, 1e3, 1e4, 1e5],64);
@@ -13,7 +13,7 @@ for i = mu_list
     fprintf('%s\n', 'Starting constrained optimization.')
     fprintf('%s %f\n', 'Current mu =',round(mu))
     fprintf('%s\n', '------------------------------------------------------------------------------------------')
-    func = @(x) (problem_9_5(x) + mu*h_9_5(x));
+    func = @(x) (sample_problem(x) + mu*h(x));
     [x0, no_its, normg] = nonlinearmin(func,x0,1e-6,1,0,1);
 end
 

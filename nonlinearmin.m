@@ -1,9 +1,9 @@
 %% nonlinearmin
 
 %%
-tic
-[x, no_its, normg] = nonlinearmin(@rosenbrock,[200,200],1e-6,1,0,1);
-toc
+%tic
+[x, no_its, normg] = nonlinearmin(@rosenbrock,[200,200],1e-6,0,0,1);
+%toc
 %%
 
 function [x, no_its, grad_norm] = nonlinearmin(f,x0,tol,method,restart,printout)
@@ -48,6 +48,8 @@ end
         if restart
             n = ceil(n/1.8);    
         end
+        
+        ls_its = 0;
 
         %Inner loop
         for j = 1:n
@@ -65,7 +67,9 @@ end
 
             %Linesearch to find optimal lambda
             F = @(lamb) f(y + dj*lamb);
-            [lambda,ls_its] = armijo(F,2,0.05);
+            [lambda,ls_itsk] = armijo(F,2,0.05);
+            ls_its = ls_its+ls_itsk;
+            
 
             %Find new proposal for y
             y_new = (y + lambda*dj);
@@ -76,9 +80,9 @@ end
 
             %Update D with BFGS or DFP depending on chosen method (page 82,89)
             if method == 1
-                 D = D + (1+inv(transpose(pj)*qj)*transpose(qj)*D*qj)*inv(transpose(pj)*qj)*pj*transpose(pj)-inv(transpose(pj)*qj)*(pj*transpose(qj)*D + D*qj*transpose(pj));
+                 D = D + (1+(transpose(pj)*qj)^(-1)*transpose(qj)*D*qj)*(transpose(pj)*qj)^(-1)*pj*transpose(pj)-(transpose(pj)*qj)^(-1)*(pj*transpose(qj)*D + D*qj*transpose(pj));
             elseif method == 0
-                 D = D + inv(transpose(pj)*qj)*pj*transpose(pj)-inv(transpose(qj)*D*qj)*D*qj*transpose(qj)*D;
+                 D = D + (transpose(pj)*qj)^(-1)*pj*transpose(pj)-(transpose(qj)*D*qj)^(-1)*D*qj*transpose(qj)*D;
             end
 
             %Update y
