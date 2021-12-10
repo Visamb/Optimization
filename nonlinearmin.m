@@ -1,12 +1,16 @@
 %% nonlinearmin
 
-%%
-%tic
-[x, no_its, normg] = nonlinearmin(@rosenbrock,[200,200],1e-6,0,0,1);
-%toc
-%%
-
 function [x, no_its, grad_norm] = nonlinearmin(f,x0,tol,method,restart,printout)
+% Optimization based on quasi-Newton optimization algorithms (BFGS or DFP).
+%
+% :param f: input function
+% :param x0: vector, intial start point(s).
+% :param tol: double, tolerance for termination criteria.
+% :param restart: integer, choice of algorithm, 1 for 'BFGS and 0 for 'DFP'.
+% :param printout: integer/boolean, prints status if true.
+% :return: x: vector of doubles, found optimal point(s).
+% :return: no_its: integer, number of iterations.
+% :return: grad_norm: double, gradient of the norm at termination.
 
 %Stop criterion
 criterion = false;

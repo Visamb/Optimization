@@ -7,6 +7,7 @@ x0 = [10;0;0;0;10];
 mu_list = vpa([1e1, 1e2, 1e3, 1e4, 1e5],64);
 
 %Iterative solution. Choose specified problem and penalty function.
+%The last returned optimal value from nonlinearmin is the found optimizer.
 for i = mu_list
     mu = i;
     fprintf('%s\n', '------------------------------------------------------------------------------------------')
@@ -19,24 +20,28 @@ end
 
 %% Functions
 
+%Problem 9_5 (Problem C in project description)
 function [y] = problem_9_5(x)
 
 y = (x(1)-5)^2 + (x(2)-3)^2;
 
 end
 
+%Problem 9_3 (problem B in the problem description)
 function [y] = problem_9_3(x)
 
 y = exp(x(1)) + x(1)^2 + x(1)*x(2);
 
 end
 
+%Constrained problem A in the problem description
 function [y] = sample_problem(x)
 
 y = exp(x(1)*x(2)*x(3)*x(4)*x(5));
 
 end
 
+%Penalty function for constrained problem A
 function [y] = h(x)
 
 p = 2;
@@ -45,6 +50,7 @@ y = (x(1)^2 + x(2)^2 + x(3)^2 + x(4)^2 + x(5)^2 -10)^p + (x(2)*x(3)-5*x(4)*x(5))
 
 end
 
+%Penalty function for constrained problem B
 function [y] = h_9_3(x)
 
 p = 2;
@@ -53,7 +59,7 @@ y = (0.5*x(1) + x(2) -1)^p;
 
 end
 
-
+%Penalty function for constrained problem C
 function [y] = h_9_5(x)
 
 p = 2;
