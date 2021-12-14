@@ -1,7 +1,10 @@
 %% nonlinearmin2
 
-%x0 = [200,200];
-%[x0, no_its, normg] = nonlinearmin2(@rosenbrock,x0,1e-6,1,0,1);
+x0 = [0,0.2];
+
+
+
+[x0, no_its, normg] = nonlinearmin2(@func,x0,1e-6,1,0,1);
 
 %%
 
@@ -41,6 +44,10 @@ y = x0;
 %Create table for printing
 if printout
     fprintf('%12s %12s %12s %12s %12s %12s %12s\n', 'iteration','x','step size', 'f(x)', 'norm(grad)', 'ls iters', 'lambda');
+    fprintf('%12.4f %12.4f %12.4f %12.4f %12.4f %12.4f %12.4f\n', no_its,y(1)',norm(step_size),f(y),norm(grad(f,y)),0,0);
+    for l = 1:dim-1
+        fprintf('%12s %12.4f\n', strings,y(l+1))
+    end
     format short g
 end
 

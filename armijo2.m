@@ -49,13 +49,22 @@ while true
         break
     end
     
+    num = 0;
+    
     %Armijo's criteria.
     if f(lambda) > T_lambda
         lambda = lambda/alpha;
-    elseif f(lambda*alpha) < T_alpha_lambda 
+        num = num+1;
+    end
+    
+    if f(lambda*alpha) < T_alpha_lambda 
         lambda = lambda*alpha;
-    else
-        f(lambda);
+        num = num+1;
+    end
+        
+    %If none of the inequalities were fulfilled, break the loop and end
+    %search.
+    if num == 0
         break
     end
 end
