@@ -1,6 +1,6 @@
 %% Armijo line search
 
-function [lambda,ls_its] = armijo2(f,alpha,epsilon)
+function [lambda,ls_its] = armijo2(f,alpha,epsilon,f_prime_0)
 % Line search method in accordance with Armijo's rule.
 %
 % :param f: input function
@@ -13,13 +13,13 @@ function [lambda,ls_its] = armijo2(f,alpha,epsilon)
 ls_its = 0;
 
 %Increment for numerical approximation of derivatives.
-h = 1e-8;
+h = 1e-12;
 
 %Initialize lambda
 lambda = 1;
 
 %Derivative at zer0 and test metrics according to Armijo's rule.
-f_prime_0 = (f(h)-f(0))/(h);
+%f_prime_0 = (f(h)-f(0))/(h);
 
 %Terminate if the derivative in 0 s larger than 0.
 if f_prime_0 > 0
